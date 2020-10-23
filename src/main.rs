@@ -17,17 +17,17 @@ fn main() -> ! {
             // Configure clock to 8 MHz (i.e. the default) and freeze it
             let mut rcc = p.RCC.configure().sysclk(8.mhz()).freeze(&mut p.FLASH);
 
-            // (Re-)configure PA1 as output
+            // Configure PC9 as output
             let gpioc = p.GPIOC.split(&mut rcc);
             let mut led = gpioc.pc9.into_push_pull_output(cs);
 
             // Get delay provider
             let mut delay = Delay::new(cp.SYST, &rcc);
 
-            // Toggle the LED roughly every second
+            // Toggle the LED roughly every 500 ms
             loop {
-                led.toggle();
-                delay.delay_ms(1_000_u16);
+                led.toggle().expect("error");
+                delay.delay_ms(500_u16);
             }
         });
     }
